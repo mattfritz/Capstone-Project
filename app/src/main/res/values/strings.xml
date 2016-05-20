@@ -2,5 +2,5 @@
     <string name="app_name">ResetHabits</string>
     <string name="title_activity_routine">RoutineActivity</string>
     <string name="content_authority">com.example.mfritz.resethabits.HabitsProvider</string>
-    <string name="blank_fragment">FRAGMENT PROPERLY LOADED</string>
+    <string name="add_routine">Add a routine with this button later&#8230;</string>
 </resources>

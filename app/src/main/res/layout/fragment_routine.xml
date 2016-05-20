@@ -4,11 +4,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.mfritz.resethabits.RoutineFragment">
 
-    <TextView
+    <ListView
         android:id="@+id/listview_routine"
-        android:text="@string/blank_fragment"
-        android:layout_marginTop="200dp"
-        android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
