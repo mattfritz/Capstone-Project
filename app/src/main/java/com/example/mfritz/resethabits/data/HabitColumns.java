@@ -20,8 +20,6 @@ public interface HabitColumns {
     @DataType(TEXT) @NotNull String NAME = "name";
     @DataType(TEXT) String DESCRIPTION = "description";
 
-    @DataType(INTEGER) @References(
-            table = Tables.ROUTINES,
-            column = RoutineColumns.ID
-    ) String ROUTINE_ID = "routineId";
+    @DataType(INTEGER) @References(table = Tables.ROUTINES, column = RoutineColumns.ID)
+    String ROUTINE_ID = "routineId";
 }

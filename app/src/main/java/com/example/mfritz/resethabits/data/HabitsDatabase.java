@@ -26,7 +26,7 @@ public class HabitsDatabase {
     }
 
     @OnCreate public static void onCreate(Context context, SQLiteDatabase db) {
-        // Nothing here for now. Add database seeds later
+        // TODO: Add database seeds
     }
 
     @OnUpgrade public static void onUpgrade(

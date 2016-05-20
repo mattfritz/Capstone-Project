@@ -20,6 +20,7 @@ public class RoutineActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void testListener(View view) {
+        // TODO: add new routines here
         Snackbar.make(view, addText, Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show();
     }

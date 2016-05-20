@@ -38,6 +38,7 @@ public class RoutineFragment extends Fragment implements LoaderManager.LoaderCal
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO: investigate whether SimpleCursorAdapter is sufficient
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_2,
                 null,
@@ -47,8 +48,7 @@ public class RoutineFragment extends Fragment implements LoaderManager.LoaderCal
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
         ButterKnife.bind(this, view);
         return view;
