@@ -3,4 +3,7 @@
     <string name="title_activity_routine">RoutineActivity</string>
     <string name="content_authority">com.example.mfritz.resethabits.HabitsProvider</string>
     <string name="add_routine">Add a routine with this button later&#8230;</string>
+    <string name="title_activity_habit">HabitActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="add_habit">Add a habit with this button later&#8230;</string>
 </resources>

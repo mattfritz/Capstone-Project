@@ -15,15 +15,26 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
-            android:authorities="@string/content_authority"
             android:name=".provider.HabitsProvider"
+            android:authorities="@string/content_authority"
             android:exported="false"
             android:syncable="true" />
 
+        <activity
+            android:name=".HabitActivity"
+            android:label="@string/title_activity_habit"
+            android:parentActivityName=".RoutineActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mfritz.resethabits.RoutineActivity" />
+        </activity>
     </application>
 
 </manifest>
