@@ -13,9 +13,5 @@ public class RoutineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_routine);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_routine_container, new RoutineFragment())
-                .commit();
     }
 }
