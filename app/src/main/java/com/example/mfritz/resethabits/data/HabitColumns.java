@@ -16,7 +16,6 @@ import static net.simonvt.schematic.annotation.DataType.Type.TEXT;
  */
 public interface HabitColumns {
     @DataType(INTEGER) @PrimaryKey @AutoIncrement String ID = "_id";
-    @DataType(INTEGER) @NotNull String ACTIVE = "active";
     @DataType(TEXT) @NotNull String NAME = "name";
     @DataType(TEXT) String DESCRIPTION = "description";
 
