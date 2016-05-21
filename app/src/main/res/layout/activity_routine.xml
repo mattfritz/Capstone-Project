@@ -21,15 +21,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:name="com.example.mfritz.resethabits.RoutineActivityFragment"
-        tools:context=".RoutineActivityFragment"
-        android:id="@+id/fragment_routine"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+    <include layout="@layout/content_routine" />
 
-    </fragment>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
