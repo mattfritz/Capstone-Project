@@ -15,8 +15,10 @@ import butterknife.OnClick;
 public class HabitActivity extends AppCompatActivity {
     private final String LOG_TAG = this.getClass().getSimpleName();
 
-    @BindString(R.string.add_habit) String addHabitText;
     @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
+    @BindString(R.string.add_habit) String addHabitText;
 
     @OnClick(R.id.fab)
     public void anotherTestListener(View view) {
@@ -30,7 +32,6 @@ public class HabitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_habit);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
