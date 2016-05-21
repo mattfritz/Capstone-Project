@@ -14,7 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RoutineActivity extends AppCompatActivity implements RoutineFragment.OnRoutineSelectedListener {
+public class RoutineActivity extends AppCompatActivity implements RoutineActivityFragment.OnRoutineSelectedListener {
     private final String LOG_TAG = this.getClass().getSimpleName();
 
     @BindView(R.id.fab) FloatingActionButton fab;

@@ -21,13 +21,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 
-public class RoutineFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class RoutineActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private final String LOG_TAG = this.getClass().getSimpleName();
     public SimpleCursorAdapter mAdapter;
 
     @BindView(R.id.listview_routine) ListView listView;
 
-    public RoutineFragment() { }
+    public RoutineActivityFragment() { }
 
     public interface OnRoutineSelectedListener {
         void onRoutineSelected(Uri contentUri);
