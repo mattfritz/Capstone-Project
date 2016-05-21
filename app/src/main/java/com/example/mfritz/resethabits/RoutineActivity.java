@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.mfritz.resethabits.data.HabitsProvider;
+import com.example.mfritz.resethabits.data.HabitsProvider.Routines;
 import com.example.mfritz.resethabits.data.RoutineColumns;
 
 import butterknife.BindView;
@@ -44,7 +44,7 @@ public class RoutineActivity extends AppCompatActivity implements RoutineActivit
     @OnClick(R.id.fab)
     public void createRoutine() {
         final Context context = this;
-        final View alertView = LayoutInflater.from(context).inflate(R.layout.dialog_create_routine, null);
+        final View alertView = LayoutInflater.from(context).inflate(R.layout.dialog_create_item, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         AlertDialog dialog = builder.setTitle(R.string.create_routine)
@@ -52,12 +52,12 @@ public class RoutineActivity extends AppCompatActivity implements RoutineActivit
                 .setPositiveButton(R.string.create_text, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EditText nameField = (EditText) alertView.findViewById(R.id.create_routine_edittext);
+                        EditText nameField = (EditText) alertView.findViewById(R.id.create_item_edittext);
                         String name = nameField.getText().toString();
 
                         ContentValues cv = new ContentValues();
                         cv.put(RoutineColumns.NAME, name);
-                        context.getContentResolver().insert(HabitsProvider.Routines.CONTENT_URI, cv);
+                        context.getContentResolver().insert(Routines.CONTENT_URI, cv);
                     }
                 })
                 .setNegativeButton(R.string.cancel_text, new DialogInterface.OnClickListener() {
