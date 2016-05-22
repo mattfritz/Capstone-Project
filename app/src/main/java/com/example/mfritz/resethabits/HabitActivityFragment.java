@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -17,6 +18,7 @@ import com.example.mfritz.resethabits.data.HabitColumns;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -54,6 +56,15 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
                 new int[]{android.R.id.text1}, 0);
     }
 
+    @OnItemClick(R.id.listview_habit)
+    void onRoutineSelected(int position, long habitId) {
+        Cursor c = (Cursor) mAdapter.getItem(position);
+        if (c != null) {
+            showDetailView();
+            // Habits.withId(habitId);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,5 +84,15 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
+    }
+
+    private void showDetailView() {
+        HabitDialogFragment habitDetail = new HabitDialogFragment();
+        getFragmentManager()
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .add(android.R.id.content, habitDetail)
+                .addToBackStack(null)
+                .commit();
     }
 }
