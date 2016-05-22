@@ -1,4 +1,4 @@
-package com.example.mfritz.resethabits;
+package com.example.mfritz.resethabits.data;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.CursorAdapter;
 
-import com.example.mfritz.resethabits.data.HabitColumns;
+import com.example.mfritz.resethabits.R;
 import com.example.mfritz.resethabits.data.HabitsDatabase.Tables;
 
 import butterknife.BindView;

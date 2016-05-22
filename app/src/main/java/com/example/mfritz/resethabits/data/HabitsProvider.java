@@ -2,10 +2,12 @@ package com.example.mfritz.resethabits.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.example.mfritz.resethabits.data.HabitsDatabase.Tables;
+import com.example.mfritz.resethabits.widget.ResetHabitsWidgetIntentService;
 
 import net.simonvt.schematic.annotation.ContentProvider;
 import net.simonvt.schematic.annotation.ContentUri;
@@ -80,6 +82,22 @@ public class HabitsProvider {
                 " AND " + Tables.HABIT_EVENTS + "." + HabitEventColumns.COMPLETE +
                     "= 1" +
                 ")";
+
+        @NotifyDelete(paths = "routines/#")
+        public static Uri[] onDelete(Context context, Uri uri) {
+            Intent widgetIntent = new Intent(context, ResetHabitsWidgetIntentService.class);
+            context.startService(widgetIntent);
+
+            return new Uri[] { Routines.CONTENT_URI };
+        }
+
+        @NotifyInsert(paths = "routines")
+        public static Uri[] onInsert(Context context, ContentValues cv) {
+            Intent widgetIntent = new Intent(context, ResetHabitsWidgetIntentService.class);
+            context.startService(widgetIntent);
+
+            return new Uri[] { Routines.CONTENT_URI };
+        }
     }
 
     @TableEndpoint(table = Tables.HABITS)
@@ -122,6 +140,9 @@ public class HabitsProvider {
 
         @NotifyDelete(paths = "habits/#")
         public static Uri[] onDelete(Context context, Uri uri) {
+            Intent widgetIntent = new Intent(context, ResetHabitsWidgetIntentService.class);
+            context.startService(widgetIntent);
+
             long habitId = Long.valueOf(uri.getLastPathSegment());
             Cursor c = context.getContentResolver().query(uri, null, null, null, null);
             c.moveToFirst();
@@ -132,13 +153,19 @@ public class HabitsProvider {
         }
 
         @NotifyInsert(paths = "habits")
-        public static Uri[] onInsert(ContentValues cv) {
+        public static Uri[] onInsert(Context context, ContentValues cv) {
+            Intent widgetIntent = new Intent(context, ResetHabitsWidgetIntentService.class);
+            context.startService(widgetIntent);
+
             long routineId = cv.getAsLong(HabitColumns.ROUTINE_ID);
             return new Uri[] { fromRoutine(routineId), Routines.withId(routineId) };
         }
 
         @NotifyUpdate(paths = "habits/#")
         public static Uri[] onUpdate(Context context, Uri uri, String where, String[] args) {
+            Intent widgetIntent = new Intent(context, ResetHabitsWidgetIntentService.class);
+            context.startService(widgetIntent);
+
             long habitId = Long.valueOf(uri.getLastPathSegment());
             Cursor c = context.getContentResolver().query(uri, null, null, null, null);
             c.moveToFirst();
@@ -177,6 +204,9 @@ public class HabitsProvider {
 
         @NotifyDelete(paths = "habitEvents/#")
         public static Uri[] onDelete(Context context, Uri uri) {
+            Intent widgetIntent = new Intent(context, ResetHabitsWidgetIntentService.class);
+            context.startService(widgetIntent);
+
             long habitEventId = Long.valueOf(uri.getLastPathSegment());
             Cursor c = context.getContentResolver().query(uri, null, null, null, null);
             c.moveToFirst();
@@ -187,13 +217,19 @@ public class HabitsProvider {
         }
 
         @NotifyInsert(paths = "habitEvents")
-        public static Uri[] onInsert(ContentValues cv) {
+        public static Uri[] onInsert(Context context, ContentValues cv) {
+            Intent widgetIntent = new Intent(context, ResetHabitsWidgetIntentService.class);
+            context.startService(widgetIntent);
+
             long habitId = cv.getAsLong(HabitEventColumns.HABIT_ID);
             return new Uri[] { fromHabit(habitId), Habits.withId(habitId), Routines.CONTENT_URI };
         }
 
         @NotifyUpdate(paths = "habitEvents/#")
         public static Uri[] onUpdate(Context context, Uri uri, String where, String[] args) {
+            Intent widgetIntent = new Intent(context, ResetHabitsWidgetIntentService.class);
+            context.startService(widgetIntent);
+
             long habitEventId = Long.valueOf(uri.getLastPathSegment());
             Cursor c = context.getContentResolver().query(uri, null, null, null, null);
             c.moveToFirst();

@@ -21,6 +21,7 @@ import android.widget.ListView;
 
 import com.example.mfritz.resethabits.data.HabitColumns;
 import com.example.mfritz.resethabits.data.HabitEventColumns;
+import com.example.mfritz.resethabits.data.HabitsAdapter;
 import com.example.mfritz.resethabits.data.HabitsProvider;
 import com.example.mfritz.resethabits.data.HabitsProvider.HabitEvents;
 import com.example.mfritz.resethabits.data.HabitsProvider.Habits;
