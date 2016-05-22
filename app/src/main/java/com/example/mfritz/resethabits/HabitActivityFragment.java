@@ -4,11 +4,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +23,7 @@ import com.example.mfritz.resethabits.data.HabitsProvider.Habits;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import butterknife.Unbinder;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -31,10 +31,11 @@ import butterknife.OnItemClick;
 public class HabitActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private final String LOG_TAG = this.getClass().getSimpleName();
     private Uri mHabitsUri;
+    private Unbinder mButterKnife;
 
     @BindView(R.id.listview_habit) ListView listView;
 
-    public SimpleCursorAdapter mAdapter;
+    public HabitsAdapter mAdapter;
 
     public HabitActivityFragment() {
     }
@@ -43,7 +44,10 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // TODO: set empty view here eventually
-        listView.setAdapter(mAdapter);
+
+        if (mAdapter != null) {
+            listView.setAdapter(mAdapter);
+        }
         registerForContextMenu(listView);
         getLoaderManager().initLoader(0, null, this);
     }
@@ -53,31 +57,27 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
 
         mHabitsUri = getActivity().getIntent().getData();
-
-        // TODO: investigate whether SimpleCursorAdapter is sufficient
-        mAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.list_item_habit,
-                null,
-                new String[]{HabitColumns.NAME},
-                new int[]{R.id.textview_name_habits_list}, 0);
     }
 
     @OnItemClick(R.id.listview_habit)
-    void onRoutineSelected(int position, long habitId) {
-        Cursor c = (Cursor) mAdapter.getItem(position);
-        if (c != null) {
-            showDetailView();
-            // Habits.withId(habitId);
-        }
+    void onCheckboxClicked(int position, long habitId) {
+        Log.d(LOG_TAG, "THIS IS TRIGGERING AT POSITION " + Integer.toString(position));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_habit, container, false);
-        // TODO: unbind butterknife on destroy
-        ButterKnife.bind(this, view);
+        mButterKnife = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mButterKnife != null) {
+            mButterKnife.unbind();
+        }
     }
 
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
@@ -85,27 +85,23 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+        if (mAdapter != null) {
+            mAdapter.swapCursor(null);
+        }
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
-    }
-
-    private void showDetailView() {
-        HabitDialogFragment habitDetail = new HabitDialogFragment();
-        getFragmentManager()
-                .beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .add(android.R.id.content, habitDetail)
-                .addToBackStack(null)
-                .commit();
+        if (mAdapter == null) {
+            mAdapter = new HabitsAdapter(getContext(), data);
+            listView.setAdapter(mAdapter);
+        } else {
+            mAdapter.swapCursor(data);
+        }
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if(v.getId() == R.id.listview_habit) {
-            // TODO: move into strings
             menu.setHeaderTitle(R.string.delete_habit);
             menu.add(Menu.NONE, 0, 0, R.string.delete_text);
         }

@@ -7,9 +7,9 @@ import net.simonvt.schematic.annotation.NotNull;
 import net.simonvt.schematic.annotation.PrimaryKey;
 import net.simonvt.schematic.annotation.References;
 
+import static com.example.mfritz.resethabits.data.HabitsDatabase.Tables;
 import static net.simonvt.schematic.annotation.DataType.Type.INTEGER;
 import static net.simonvt.schematic.annotation.DataType.Type.TEXT;
-import static com.example.mfritz.resethabits.data.HabitsDatabase.Tables;
 
 /**
  * Created by matt on 5/21/16.

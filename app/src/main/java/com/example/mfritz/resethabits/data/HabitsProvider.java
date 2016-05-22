@@ -16,8 +16,10 @@ import net.simonvt.schematic.annotation.NotifyInsert;
 import net.simonvt.schematic.annotation.NotifyUpdate;
 import net.simonvt.schematic.annotation.TableEndpoint;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Created by matt on 5/18/16.
@@ -30,6 +32,11 @@ public class HabitsProvider {
 
     public static final String AUTHORITY = "com.example.mfritz.resethabits.HabitsProvider";
     private static final String BASE_URI = "content://" + AUTHORITY + "/";
+
+    public static String getDay() {
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+        return cal.get(Calendar.DAY_OF_YEAR) + "-" + cal.get(Calendar.YEAR);
+    }
 
     @TableEndpoint(table = Tables.ROUTINES)
     public static class Routines {
@@ -78,6 +85,15 @@ public class HabitsProvider {
     @TableEndpoint(table = Tables.HABITS)
     public static class Habits {
 
+        @MapColumns
+        public static Map<String, String> mapColumns() {
+            Map<String, String> map = new HashMap<>();
+
+            map.put(HabitColumns.COMPLETE_TODAY, COMPLETE_TODAY);
+
+            return map;
+        }
+
         @ContentUri(path = "habits", type = "vnd.android.cursor.dir/habit")
         public static final Uri CONTENT_URI = Uri.parse(BASE_URI + "/habits");
 
@@ -100,6 +116,13 @@ public class HabitsProvider {
         public static Uri fromRoutine(long routineId) {
             return Uri.parse(BASE_URI + "habits/fromRoutine/" + String.valueOf(routineId));
         }
+
+        static final String COMPLETE_TODAY = "(SELECT " + HabitEventColumns.COMPLETE + " FROM " + Tables.HABIT_EVENTS +
+                " WHERE " + Tables.HABITS + "." + HabitColumns.ID +
+                "=" + Tables.HABIT_EVENTS + "." + HabitEventColumns.HABIT_ID +
+                    " AND " + Tables.HABIT_EVENTS + "." + HabitEventColumns.DATE +
+                        "=" + getDay() +
+                ")";
 
         @NotifyDelete(paths = "habits/#")
         public static Uri[] onDelete(Context context, Uri uri) {
