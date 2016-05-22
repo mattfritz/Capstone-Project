@@ -98,10 +98,11 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (item.getTitle() == "Delete") {
+        if (item.getTitle().equals("Delete")) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             Cursor c = (Cursor) mAdapter.getItem(info.position);
             if (c != null) {
+                c.moveToFirst();
                 int idIndex = c.getColumnIndex(RoutineColumns.ID);
                 long routineId = c.getLong(idIndex);
                 getActivity().getContentResolver().delete(Routines.withId(routineId), null, null);

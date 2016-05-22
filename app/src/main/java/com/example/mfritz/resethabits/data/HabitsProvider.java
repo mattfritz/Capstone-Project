@@ -1,5 +1,8 @@
 package com.example.mfritz.resethabits.data;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 
 import com.example.mfritz.resethabits.data.HabitsDatabase.Tables;
@@ -7,6 +10,9 @@ import com.example.mfritz.resethabits.data.HabitsDatabase.Tables;
 import net.simonvt.schematic.annotation.ContentProvider;
 import net.simonvt.schematic.annotation.ContentUri;
 import net.simonvt.schematic.annotation.InexactContentUri;
+import net.simonvt.schematic.annotation.NotifyDelete;
+import net.simonvt.schematic.annotation.NotifyInsert;
+import net.simonvt.schematic.annotation.NotifyUpdate;
 import net.simonvt.schematic.annotation.TableEndpoint;
 
 /**
@@ -64,6 +70,33 @@ public class HabitsProvider {
             return Uri.parse(BASE_URI + "habits/fromRoutine/" + String.valueOf(routineId));
         }
 
-        // TODO: need to add @Notify annotations for when data changes
+        @NotifyDelete(paths = "habits/#")
+        public static Uri[] onDelete(Context context, Uri uri) {
+            long habitId = Long.valueOf(uri.getLastPathSegment());
+            Cursor c = context.getContentResolver().query(uri, null, null, null, null);
+            c.moveToFirst();
+            long routineId = c.getLong(c.getColumnIndex(HabitColumns.ROUTINE_ID));
+            c.close();
+
+            return new Uri[] { withId(habitId), fromRoutine(routineId), Routines.withId(routineId) };
+        }
+
+        @NotifyInsert(paths = "habits")
+        public static Uri[] onInsert(ContentValues cv) {
+            long routineId = cv.getAsLong(HabitColumns.ROUTINE_ID);
+            return new Uri[] { fromRoutine(routineId), Routines.withId(routineId) };
+        }
+
+        @NotifyUpdate(paths = "habits/#")
+        public static Uri[] onUpdate(Context context, Uri uri, String where, String[] args) {
+            long habitId = Long.valueOf(uri.getLastPathSegment());
+            Cursor c = context.getContentResolver().query(uri, null, null, null, null);
+            c.moveToFirst();
+            long routineId = c.getLong(c.getColumnIndex(HabitColumns.ROUTINE_ID));
+            c.close();
+
+            return new Uri[] { withId(habitId), fromRoutine(routineId), Routines.withId(routineId) };
+        }
+
     }
 }
