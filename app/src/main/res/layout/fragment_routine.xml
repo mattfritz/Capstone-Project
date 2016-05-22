@@ -11,6 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/textview_quote"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:padding="16dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <com.google.android.gms.ads.AdView
         android:id="@+id/main_adview"
         android:layout_height="wrap_content"

@@ -2,11 +2,13 @@ package com.example.mfritz.resethabits;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.mfritz.resethabits.data.HabitsProvider;
 import com.example.mfritz.resethabits.data.HabitsProvider.Routines;
@@ -24,6 +27,14 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +49,7 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
 
     @BindView(R.id.listview_routine) ListView listView;
     @BindView(R.id.main_adview) AdView adView;
+    @BindView(R.id.textview_quote) TextView quote;
 
     public RoutineActivityFragment() { }
 
@@ -65,6 +77,8 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
         mTracker = app.getDefaultTracker();
         mTracker.setScreenName(LOG_TAG);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        new FetchQuoteTask().execute();
     }
 
     @OnItemClick(R.id.listview_routine)
@@ -134,5 +148,42 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
             }
         }
         return true;
+    }
+
+    public class FetchQuoteTask extends AsyncTask<Void, Void, String> {
+        private final String LOG_TAG = this.getClass().getSimpleName();
+        private final OkHttpClient client = new OkHttpClient();
+
+        @Override
+        protected String doInBackground(Void... params) {
+            Request request = new Request.Builder()
+                    .url("http://quotes.rest/qod.json?category=inspire")
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unsuccessful request: " + response);
+                }
+
+                String body = response.body().string();
+                JSONObject responseJson = new JSONObject(body);
+
+                JSONObject contents = responseJson.getJSONObject("contents");
+                JSONArray quotes = contents.getJSONArray("quotes");
+                String quote = quotes.getJSONObject(0).getString("quote");
+
+                Log.d(LOG_TAG, "Quote: " + quote);
+                return quote;
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "Error fetching quote: " + e.getMessage());
+                return "";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            quote.setText(s);
+        }
     }
 }
