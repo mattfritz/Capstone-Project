@@ -8,9 +8,13 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.mfritz.resethabits.data.HabitsProvider;
@@ -38,6 +42,7 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
         super.onActivityCreated(savedInstanceState);
         // TODO: set empty view here eventually
         listView.setAdapter(mAdapter);
+        registerForContextMenu(listView);
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -54,7 +59,7 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
     }
 
     @OnItemClick(R.id.listview_routine)
-    void onRoutineSelected(int position, long routineId) {
+    public void onRoutineSelected(int position, long routineId) {
         Cursor c = (Cursor) mAdapter.getItem(position);
         if (c != null) {
             ((OnRoutineSelectedListener) getActivity())
@@ -80,5 +85,28 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if(v.getId() == R.id.listview_routine) {
+            // TODO: move into strings
+            menu.setHeaderTitle("Delete this routine?");
+            menu.add(Menu.NONE, 0, 0, "Delete");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Delete") {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            Cursor c = (Cursor) mAdapter.getItem(info.position);
+            if (c != null) {
+                int idIndex = c.getColumnIndex(RoutineColumns.ID);
+                long routineId = c.getLong(idIndex);
+                getActivity().getContentResolver().delete(Routines.withId(routineId), null, null);
+            }
+        }
+        return true;
     }
 }
