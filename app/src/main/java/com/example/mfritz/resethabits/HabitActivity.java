@@ -14,6 +14,8 @@ import android.widget.EditText;
 
 import com.example.mfritz.resethabits.data.HabitColumns;
 import com.example.mfritz.resethabits.data.HabitsProvider.Habits;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,8 +23,8 @@ import butterknife.OnClick;
 
 public class HabitActivity extends AppCompatActivity {
     private final String LOG_TAG = this.getClass().getSimpleName();
-
     private int mRoutineId;
+    private Tracker mTracker;
 
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -35,6 +37,11 @@ public class HabitActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mRoutineId = Integer.parseInt(getIntent().getData().getLastPathSegment());
+
+        ResetHabits app = (ResetHabits) getApplication();
+        mTracker = app.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @OnClick(R.id.fab)
@@ -55,6 +62,11 @@ public class HabitActivity extends AppCompatActivity {
                         cv.put(HabitColumns.NAME, name);
                         cv.put(HabitColumns.ROUTINE_ID, mRoutineId);
                         context.getContentResolver().insert(Habits.CONTENT_URI, cv);
+
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Action")
+                                .setAction("CreateHabit")
+                                .build());
                     }
                 })
                 .setNegativeButton(R.string.cancel_text, new DialogInterface.OnClickListener() {

@@ -16,6 +16,8 @@ import android.widget.EditText;
 
 import com.example.mfritz.resethabits.data.HabitsProvider.Routines;
 import com.example.mfritz.resethabits.data.RoutineColumns;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +25,7 @@ import butterknife.OnClick;
 
 public class RoutineActivity extends AppCompatActivity implements RoutineActivityFragment.OnRoutineSelectedListener {
     private final String LOG_TAG = this.getClass().getSimpleName();
+    private Tracker mTracker;
 
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -33,6 +36,11 @@ public class RoutineActivity extends AppCompatActivity implements RoutineActivit
         setContentView(R.layout.activity_routine);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        ResetHabits app = (ResetHabits) getApplication();
+        mTracker = app.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -58,6 +66,11 @@ public class RoutineActivity extends AppCompatActivity implements RoutineActivit
                         ContentValues cv = new ContentValues();
                         cv.put(RoutineColumns.NAME, name);
                         context.getContentResolver().insert(Routines.CONTENT_URI, cv);
+
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Action")
+                                .setAction("CreateRoutine")
+                                .build());
                     }
                 })
                 .setNegativeButton(R.string.cancel_text, new DialogInterface.OnClickListener() {

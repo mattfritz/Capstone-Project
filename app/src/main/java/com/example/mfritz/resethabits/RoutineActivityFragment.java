@@ -22,6 +22,8 @@ import com.example.mfritz.resethabits.data.RoutineColumns;
 import com.example.mfritz.resethabits.data.RoutinesAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +33,7 @@ import butterknife.Unbinder;
 public class RoutineActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private final String LOG_TAG = this.getClass().getSimpleName();
     private Unbinder mButterKnife;
+    private Tracker mTracker;
     public RoutinesAdapter mAdapter;
 
     @BindView(R.id.listview_routine) ListView listView;
@@ -57,6 +60,11 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ResetHabits app = (ResetHabits) getActivity().getApplication();
+        mTracker = app.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @OnItemClick(R.id.listview_routine)
@@ -118,6 +126,11 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
                 int idIndex = c.getColumnIndex(RoutineColumns.ID);
                 long routineId = c.getLong(idIndex);
                 getActivity().getContentResolver().delete(Routines.withId(routineId), null, null);
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Action")
+                    .setAction("DeleteRoutine")
+                    .build());
             }
         }
         return true;

@@ -24,6 +24,8 @@ import com.example.mfritz.resethabits.data.HabitEventColumns;
 import com.example.mfritz.resethabits.data.HabitsProvider;
 import com.example.mfritz.resethabits.data.HabitsProvider.HabitEvents;
 import com.example.mfritz.resethabits.data.HabitsProvider.Habits;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +39,7 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
     private final String LOG_TAG = this.getClass().getSimpleName();
     private Uri mHabitsUri;
     private Unbinder mButterKnife;
+    private Tracker mTracker;
 
     @BindView(R.id.listview_habit) ListView listView;
 
@@ -62,6 +65,11 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
 
         mHabitsUri = getActivity().getIntent().getData();
+
+        ResetHabits app = (ResetHabits) getActivity().getApplication();
+        mTracker = app.getDefaultTracker();
+        mTracker.setScreenName(LOG_TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @OnItemClick(R.id.listview_habit)
@@ -71,6 +79,11 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
         if (check.isChecked()) {
             cr.delete(HabitEvents.fromHabit(habitId), null, null);
             check.setChecked(false);
+
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Action")
+                    .setAction("UnCompleteHabit")
+                    .build());
         } else {
             ContentValues cv = new ContentValues();
             cv.put(HabitEventColumns.HABIT_ID, habitId);
@@ -78,6 +91,11 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
             cv.put(HabitEventColumns.DATE, HabitsProvider.getDay());
             cr.insert(HabitEvents.CONTENT_URI, cv);
             check.setChecked(true);
+
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Action")
+                    .setAction("CompleteHabit")
+                    .build());
         }
     }
 
@@ -134,6 +152,11 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
                 int idIndex = c.getColumnIndex(HabitColumns.ID);
                 long routineId = c.getLong(idIndex);
                 getActivity().getContentResolver().delete(Habits.withId(routineId), null, null);
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("DeleteHabit")
+                        .build());
             }
         }
         return true;
