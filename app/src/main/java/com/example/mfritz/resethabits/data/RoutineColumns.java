@@ -14,4 +14,7 @@ import static net.simonvt.schematic.annotation.DataType.Type.TEXT;
 public interface RoutineColumns {
     @DataType(INTEGER) @PrimaryKey @AutoIncrement String ID = "_id";
     @DataType(TEXT) @NotNull String NAME = "name";
+
+    String HABIT_COUNT = "habit_count";
+    String COMPLETE_HABIT_COUNT = "complete_habit_count";
 }
