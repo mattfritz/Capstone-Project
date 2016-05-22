@@ -52,10 +52,10 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
 
         // TODO: investigate whether SimpleCursorAdapter is sufficient
         mAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_2,
+                R.layout.list_item_routine,
                 null,
                 new String[]{RoutineColumns.NAME},
-                new int[]{android.R.id.text1}, 0);
+                new int[]{R.id.textview_name_routine_list}, 0);
     }
 
     @OnItemClick(R.id.listview_routine)

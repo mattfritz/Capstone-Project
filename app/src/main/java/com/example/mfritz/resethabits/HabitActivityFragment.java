@@ -56,10 +56,10 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
 
         // TODO: investigate whether SimpleCursorAdapter is sufficient
         mAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_checked,
+                R.layout.list_item_habit,
                 null,
                 new String[]{HabitColumns.NAME},
-                new int[]{android.R.id.text1}, 0);
+                new int[]{R.id.textview_name_habits_list}, 0);
     }
 
     @OnItemClick(R.id.listview_habit)
