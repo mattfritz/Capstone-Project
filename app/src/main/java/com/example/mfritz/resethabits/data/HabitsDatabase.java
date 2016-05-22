@@ -23,6 +23,7 @@ public class HabitsDatabase {
     public static class Tables {
         @Table(RoutineColumns.class) @IfNotExists public static final String ROUTINES = "routines";
         @Table(HabitColumns.class) @IfNotExists public static final String HABITS = "habits";
+        @Table(HabitEventColumns.class) @IfNotExists public static final String HABIT_EVENTS = "habit_events";
     }
 
     @OnCreate public static void onCreate(Context context, SQLiteDatabase db) {

@@ -56,7 +56,7 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
 
         // TODO: investigate whether SimpleCursorAdapter is sufficient
         mAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_2,
+                android.R.layout.simple_list_item_checked,
                 null,
                 new String[]{HabitColumns.NAME},
                 new int[]{android.R.id.text1}, 0);
