@@ -4,6 +4,9 @@
     <string name="content_authority">com.example.mfritz.resethabits.HabitsProvider</string>
     <string name="create_text">Create</string>
     <string name="cancel_text">Cancel</string>
+    <string name="delete_text">Delete</string>
+    <string name="delete_routine">Delete this routine?</string>
+    <string name="delete_habit">Delete this habit?</string>
     <string name="title_activity_habit">HabitActivity</string>
     <string name="action_settings">Settings</string>
     <string name="create_routine">Create Routine</string>

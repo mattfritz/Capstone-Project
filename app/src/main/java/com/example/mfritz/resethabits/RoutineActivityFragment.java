@@ -91,8 +91,8 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if(v.getId() == R.id.listview_routine) {
             // TODO: move into strings
-            menu.setHeaderTitle("Delete this routine?");
-            menu.add(Menu.NONE, 0, 0, "Delete");
+            menu.setHeaderTitle(R.string.delete_routine);
+            menu.add(Menu.NONE, 0, 0, R.string.delete_text);
         }
     }
 

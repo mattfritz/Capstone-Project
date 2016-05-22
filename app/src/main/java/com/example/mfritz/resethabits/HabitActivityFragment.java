@@ -9,12 +9,17 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.mfritz.resethabits.data.HabitColumns;
+import com.example.mfritz.resethabits.data.HabitsProvider.Habits;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +44,7 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
         super.onActivityCreated(savedInstanceState);
         // TODO: set empty view here eventually
         listView.setAdapter(mAdapter);
+        registerForContextMenu(listView);
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -94,5 +100,28 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
                 .add(android.R.id.content, habitDetail)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if(v.getId() == R.id.listview_habit) {
+            // TODO: move into strings
+            menu.setHeaderTitle(R.string.delete_habit);
+            menu.add(Menu.NONE, 0, 0, R.string.delete_text);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Delete") {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            Cursor c = (Cursor) mAdapter.getItem(info.position);
+            if (c != null) {
+                int idIndex = c.getColumnIndex(HabitColumns.ID);
+                long routineId = c.getLong(idIndex);
+                getActivity().getContentResolver().delete(Habits.withId(routineId), null, null);
+            }
+        }
+        return true;
     }
 }
