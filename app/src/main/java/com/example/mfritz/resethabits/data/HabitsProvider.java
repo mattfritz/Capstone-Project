@@ -183,13 +183,13 @@ public class HabitsProvider {
             long habitId = c.getLong(c.getColumnIndex(HabitEventColumns.HABIT_ID));
             c.close();
 
-            return new Uri[] { withId(habitEventId), fromHabit(habitId), Habits.withId(habitId) };
+            return new Uri[] { withId(habitEventId), fromHabit(habitId), Habits.withId(habitId), Routines.CONTENT_URI };
         }
 
         @NotifyInsert(paths = "habitEvents")
         public static Uri[] onInsert(ContentValues cv) {
             long habitId = cv.getAsLong(HabitEventColumns.HABIT_ID);
-            return new Uri[] { fromHabit(habitId), Habits.withId(habitId) };
+            return new Uri[] { fromHabit(habitId), Habits.withId(habitId), Routines.CONTENT_URI };
         }
 
         @NotifyUpdate(paths = "habitEvents/#")
@@ -200,7 +200,7 @@ public class HabitsProvider {
             long habitId = c.getLong(c.getColumnIndex(HabitEventColumns.HABIT_ID));
             c.close();
 
-            return new Uri[] { withId(habitEventId), fromHabit(habitId), Habits.withId(habitId) };
+            return new Uri[] { withId(habitEventId), fromHabit(habitId), Habits.withId(habitId), Routines.CONTENT_URI };
         }
     }
 }

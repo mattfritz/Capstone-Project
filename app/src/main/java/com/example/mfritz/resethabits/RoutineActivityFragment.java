@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,14 +19,17 @@ import android.widget.ListView;
 import com.example.mfritz.resethabits.data.HabitsProvider;
 import com.example.mfritz.resethabits.data.HabitsProvider.Routines;
 import com.example.mfritz.resethabits.data.RoutineColumns;
+import com.example.mfritz.resethabits.data.RoutinesAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import butterknife.Unbinder;
 
 public class RoutineActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private final String LOG_TAG = this.getClass().getSimpleName();
-    public SimpleCursorAdapter mAdapter;
+    private Unbinder mButterKnife;
+    public RoutinesAdapter mAdapter;
 
     @BindView(R.id.listview_routine) ListView listView;
 
@@ -49,13 +51,6 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // TODO: investigate whether SimpleCursorAdapter is sufficient
-        mAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.list_item_routine,
-                null,
-                new String[]{RoutineColumns.NAME},
-                new int[]{R.id.textview_name_routine_list}, 0);
     }
 
     @OnItemClick(R.id.listview_routine)
@@ -70,27 +65,38 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_routine, container, false);
-        // TODO: unbind butterknife on destroy
-        ButterKnife.bind(this, view);
+        mButterKnife = ButterKnife.bind(this, view);
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mButterKnife.unbind();
+    }
+
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-        return new CursorLoader(getActivity(), Routines.CONTENT_URI, null, null, null, null);
+        return new CursorLoader(getActivity(), Routines.CONTENT_URI, RoutinesAdapter.PROJECTION, null, null, null);
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+        if (mAdapter != null) {
+            mAdapter.swapCursor(null);
+        }
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
+        if (mAdapter == null) {
+            mAdapter = new RoutinesAdapter(getContext(), data);
+            listView.setAdapter(mAdapter);
+        } else {
+            mAdapter.swapCursor(data);
+        }
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if(v.getId() == R.id.listview_routine) {
-            // TODO: move into strings
             menu.setHeaderTitle(R.string.delete_routine);
             menu.add(Menu.NONE, 0, 0, R.string.delete_text);
         }
