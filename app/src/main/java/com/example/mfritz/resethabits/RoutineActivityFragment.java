@@ -20,6 +20,8 @@ import com.example.mfritz.resethabits.data.HabitsProvider;
 import com.example.mfritz.resethabits.data.HabitsProvider.Routines;
 import com.example.mfritz.resethabits.data.RoutineColumns;
 import com.example.mfritz.resethabits.data.RoutinesAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +34,7 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
     public RoutinesAdapter mAdapter;
 
     @BindView(R.id.listview_routine) ListView listView;
+    @BindView(R.id.main_adview) AdView adView;
 
     public RoutineActivityFragment() { }
 
@@ -46,6 +49,9 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
         listView.setAdapter(mAdapter);
         registerForContextMenu(listView);
         getLoaderManager().initLoader(0, null, this);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 
     @Override
