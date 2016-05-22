@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.mfritz.resethabits.data.HabitColumns;
 import com.example.mfritz.resethabits.data.HabitEventColumns;
@@ -43,6 +44,7 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
     private Tracker mTracker;
 
     @BindView(R.id.listview_habit) ListView listView;
+    @BindView(R.id.empty_listview) TextView emptyListView;
 
     public HabitsAdapter mAdapter;
 
@@ -55,6 +57,7 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
         // TODO: set empty view here eventually
 
         if (mAdapter != null) {
+            listView.setEmptyView(emptyListView);
             listView.setAdapter(mAdapter);
         }
         registerForContextMenu(listView);
@@ -129,6 +132,7 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (mAdapter == null) {
             mAdapter = new HabitsAdapter(getContext(), data);
+            listView.setEmptyView(emptyListView);
             listView.setAdapter(mAdapter);
         } else {
             mAdapter.swapCursor(data);

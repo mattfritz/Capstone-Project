@@ -49,6 +49,7 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
 
     @BindView(R.id.listview_routine) ListView listView;
     @BindView(R.id.main_adview) AdView adView;
+    @BindView(R.id.empty_listview) TextView emptyListView;
     @BindView(R.id.textview_quote) TextView quote;
 
     public RoutineActivityFragment() { }
@@ -60,8 +61,11 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // TODO: set empty view here eventually
-        listView.setAdapter(mAdapter);
+        if (mAdapter != null) {
+            listView.setEmptyView(emptyListView);
+            listView.setAdapter(mAdapter);
+        }
+
         registerForContextMenu(listView);
         getLoaderManager().initLoader(0, null, this);
 
@@ -116,6 +120,7 @@ public class RoutineActivityFragment extends Fragment implements LoaderManager.L
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (mAdapter == null) {
             mAdapter = new RoutinesAdapter(getContext(), data);
+            listView.setEmptyView(emptyListView);
             listView.setAdapter(mAdapter);
         } else {
             mAdapter.swapCursor(data);
