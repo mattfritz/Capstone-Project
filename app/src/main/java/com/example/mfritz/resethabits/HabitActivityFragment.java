@@ -1,5 +1,7 @@
 package com.example.mfritz.resethabits;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,9 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
 
 import com.example.mfritz.resethabits.data.HabitColumns;
+import com.example.mfritz.resethabits.data.HabitEventColumns;
+import com.example.mfritz.resethabits.data.HabitsProvider;
+import com.example.mfritz.resethabits.data.HabitsProvider.HabitEvents;
 import com.example.mfritz.resethabits.data.HabitsProvider.Habits;
 
 import butterknife.BindView;
@@ -60,8 +65,20 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
     }
 
     @OnItemClick(R.id.listview_habit)
-    void onCheckboxClicked(int position, long habitId) {
-        Log.d(LOG_TAG, "THIS IS TRIGGERING AT POSITION " + Integer.toString(position));
+    void onCheckboxClicked(View view, int position, long habitId) {
+        CheckedTextView check = (CheckedTextView) view.findViewById(R.id.checkedtextview_habits_list);
+        ContentResolver cr = getActivity().getContentResolver();
+        if (check.isChecked()) {
+            cr.delete(HabitEvents.fromHabit(habitId), null, null);
+            check.setChecked(false);
+        } else {
+            ContentValues cv = new ContentValues();
+            cv.put(HabitEventColumns.HABIT_ID, habitId);
+            cv.put(HabitEventColumns.COMPLETE, 1);
+            cv.put(HabitEventColumns.DATE, HabitsProvider.getDay());
+            cr.insert(HabitEvents.CONTENT_URI, cv);
+            check.setChecked(true);
+        }
     }
 
     @Override

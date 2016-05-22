@@ -5,9 +5,8 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.CursorAdapter;
-import android.widget.TextView;
 
 import com.example.mfritz.resethabits.data.HabitColumns;
 
@@ -37,17 +36,16 @@ public class HabitsAdapter extends CursorAdapter {
 
         int nameIndex = cursor.getColumnIndex(HabitColumns.NAME);
         String name = cursor.getString(nameIndex);
-        holder.name.setText(name);
+        holder.item.setText(name);
 
         int completedIndex = cursor.getColumnIndex(HabitColumns.COMPLETE_TODAY);
         int completed = cursor.getInt(completedIndex);
         boolean isChecked = completed == 1;
-        holder.complete.setChecked(isChecked);
+        holder.item.setChecked(isChecked);
     }
 
     static class ViewHolder {
-        @BindView(R.id.textview_name_habits_list) TextView name;
-        @BindView(R.id.checkbox_habit_list) CheckBox complete;
+        @BindView(R.id.checkedtextview_habits_list) CheckedTextView item;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

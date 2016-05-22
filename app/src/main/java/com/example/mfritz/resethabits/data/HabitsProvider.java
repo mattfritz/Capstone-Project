@@ -170,7 +170,7 @@ public class HabitsProvider {
         }
 
         @InexactContentUri(
-                path = "habitsEvents/fromHabit/#",
+                path = "habitEvents/fromHabit/#",
                 name = "HABIT_EVENTS_FROM_HABIT",
                 type = "vnd.android.cursor.dir/habitEvent",
                 whereColumn = HabitEventColumns.HABIT_ID,

@@ -22,6 +22,7 @@
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
         android:textAlignment="textEnd"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:checkMark="?android:attr/textCheckMark"
         android:layout_alignParentEnd="true"
         android:gravity="end|center_vertical"
         android:layout_width="wrap_content"
