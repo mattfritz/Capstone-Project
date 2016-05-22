@@ -18,7 +18,7 @@ public interface HabitColumns {
     @DataType(INTEGER) @PrimaryKey @AutoIncrement String ID = "_id";
     @DataType(TEXT) @NotNull String NAME = "name";
     @DataType(TEXT) String DESCRIPTION = "description";
-    @DataType(INTEGER) String COMPLETE_TODAY = "complete_today";
+    String COMPLETE_TODAY = "complete_today";
 
     @DataType(INTEGER) @References(table = Tables.ROUTINES, column = RoutineColumns.ID)
     String ROUTINE_ID = "routineId";

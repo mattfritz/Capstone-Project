@@ -98,7 +98,7 @@ public class HabitActivityFragment extends Fragment implements LoaderManager.Loa
     }
 
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-        return new CursorLoader(getActivity(), mHabitsUri, null, null, null, null);
+        return new CursorLoader(getActivity(), mHabitsUri, HabitsAdapter.PROJECTION, null, null, null);
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {

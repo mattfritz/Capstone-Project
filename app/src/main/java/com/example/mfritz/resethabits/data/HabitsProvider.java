@@ -111,18 +111,14 @@ public class HabitsProvider {
                 path = "habits/fromRoutine/#",
                 name = "HABITS_FROM_ROUTINE",
                 type = "vnd.android.cursor.dir/habit",
-                whereColumn = HabitColumns.ROUTINE_ID,
+                whereColumn = Tables.HABITS + "." + HabitColumns.ROUTINE_ID,
+                join = "LEFT JOIN " + Tables.HABIT_EVENTS + " ON habits._id = habit_events.habit_id",
                 pathSegment = 2)
         public static Uri fromRoutine(long routineId) {
             return Uri.parse(BASE_URI + "habits/fromRoutine/" + String.valueOf(routineId));
         }
 
-        static final String COMPLETE_TODAY = "(SELECT " + HabitEventColumns.COMPLETE + " FROM " + Tables.HABIT_EVENTS +
-                " WHERE " + Tables.HABITS + "." + HabitColumns.ID +
-                "=" + Tables.HABIT_EVENTS + "." + HabitEventColumns.HABIT_ID +
-                    " AND " + Tables.HABIT_EVENTS + "." + HabitEventColumns.DATE +
-                        "=" + getDay() +
-                ")";
+        static final String COMPLETE_TODAY = "habit_events.complete";
 
         @NotifyDelete(paths = "habits/#")
         public static Uri[] onDelete(Context context, Uri uri) {
