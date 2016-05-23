@@ -7,6 +7,7 @@
 
     <TextView
         android:id="@+id/widget_title"
+        android:contentDescription="@string/cd_widget_title"
         android:layout_gravity="center_horizontal"
         android:text="@string/title_activity_routine"
         android:textAlignment="center"
@@ -16,6 +17,7 @@
 
     <TextView
         android:id="@+id/widget_text"
+        android:contentDescription="@string/cd_widget_content"
         android:textSize="24sp"
         android:text="@string/widget_placeholder"
         android:layout_gravity="center"

@@ -8,11 +8,13 @@
 
     <ListView
         android:id="@+id/listview_routine"
+        android:contentDescription="@string/cd_list_routines"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/empty_listview"
+        android:contentDescription="@string/cd_empty_list"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -24,6 +26,7 @@
 
     <TextView
         android:id="@+id/textview_quote"
+        android:contentDescription="@string/cd_quote"
         android:textSize="16sp"
         android:textStyle="italic"
         android:padding="16dp"
@@ -33,6 +36,7 @@
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/main_adview"
+        android:contentDescription="@string/cd_ads"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_gravity="bottom|center_horizontal"

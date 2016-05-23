@@ -17,4 +17,20 @@
 
     <!--This is a public test ad unit ID from Google-->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <!--Accessibility-->
+    <string name="cd_toolbar">Toolbar</string>
+    <string name="cd_add_routine_button">Add routine button</string>
+    <string name="cd_add_habit_button">Add habit button</string>
+    <string name="cd_add_name">Add item name</string>
+    <string name="cd_list_routines">List of routines</string>
+    <string name="cd_list_habits">List of habits</string>
+    <string name="cd_empty_list">Empty list</string>
+    <string name="cd_quote">Quote of the day</string>
+    <string name="cd_ads">Advertisement</string>
+    <string name="cd_routine_item">Routine item</string>
+    <string name="cd_routine_status">Routine status</string>
+    <string name="cd_habit_item">Habit item and completed status</string>
+    <string name="cd_widget_title">Habit widget</string>
+    <string name="cd_widget_content">Habits completed</string>
 </resources>
